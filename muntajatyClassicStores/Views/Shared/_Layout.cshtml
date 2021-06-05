@@ -1,0 +1,274 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta itemprop="name" content="@ViewBag.Title">
+    <meta property="og:title" content="@ViewBag.Title">
+    <meta name="twitter:title" content="@ViewBag.Title">
+
+    <meta name="description" content="البرمجة وتقنية المعلومات">
+    <meta itemprop="description" content="البرمجة وتقنية المعلومات">
+    <meta property="og:description" content="البرمجة وتقنية المعلومات">
+    <meta name="twitter:description" content="البرمجة وتقنية المعلومات">
+
+    <meta itemprop="image" content="https://firebasestorage.googleapis.com/v0/b/muntajatyclassic.appspot.com/o/System%2F%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%8A2.png?alt=media&token=0a2457ca-014b-4ee3-aa64-4f09a0c63a5f">
+    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/muntajatyclassic.appspot.com/o/System%2F%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%8A2.png?alt=media&token=0a2457ca-014b-4ee3-aa64-4f09a0c63a5f">
+    <meta name="twitter:image" content="https://firebasestorage.googleapis.com/v0/b/muntajatyclassic.appspot.com/o/System%2F%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%8A2.png?alt=media&token=0a2457ca-014b-4ee3-aa64-4f09a0c63a5f">
+
+    <meta property="og:url" content="@Request.Url.Host@Request.RawUrl">
+    <meta property="twitter:url" content="@Request.Url.Host@Request.RawUrl">
+
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="robots" content="index, follow">
+
+    <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
+    @*@Styles.Render("~/Content/css")*@
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    <link rel="stylesheet" href="https://hamidheidarinia.github.io/bootstrap-rtl/4.2/assets/css/bootstrap-rtl.min.css">
+    <script src="~/Content/js/jquery-3.5.1.slim.min.js"></script>
+    <script src=" ~/Content/js/popper.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
+    <link href="~/Content/myStyle.css" rel="stylesheet" />
+
+    <title>@ViewBag.Title</title>
+</head>
+
+<body>
+    <!-- القائمة الرئيسية-->
+    <div class="row">
+        <div class="col-8">
+            <nav class="navbar navbar-expand-lg navbar-light bg-primary blue border_orange fixed-top">
+                <a class="navbar-brand" title="انقر هنا للعودة إلى الصفحة الرئيسية" href="@Url.Action("Index", "Home")">
+                    <img class="border border-info bg-white" style="width: 100px; height: 50px;"
+                         src="https://firebasestorage.googleapis.com/v0/b/muntajatyclassic.appspot.com/o/System%2F%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%8A2.png?alt=media&token=0a2457ca-014b-4ee3-aa64-4f09a0c63a5f"
+                         title="تسوق سريع وأنيق">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link text-white" href=@Url.Action("Index", "Home") #">@ViewBag.productItem العروض <span class="sr-only">(الحالي)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="@Url.Action("Index", "Home")#stores" target="_self">المتاجر</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="@Url.Action("Index", "Home")#aboutUs" target="_self">حولنا</a>
+                        </li>
+                        @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
+                            <li>@Html.ActionLink("About", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                    </ul>
+                    <button type="button" class="btn btn-primary orange mr-2" data-toggle="modal" data-target="#addNewStore">أضف متجرك إلى منتجاتي</button>
+
+
+                    @*<h3 class="text-white text-center mr-5">
+                            انضم إلينا عبر
+                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Whatsapp_Link) == false)
+                            {
+                                <a href="@ViewBag.progInfo.Whatsapp_Link" title="تواصل معنا عبر واتسآب" target="_blank" class="text-white">0508532127</a>
+                            }
+                        </h3>*@
+
+                    @using (Html.BeginForm("search", "Stores", FormMethod.Get))
+                    {
+                        <form class="form-inline my-2 my-lg-0 ml-2 pr-10">
+                            <div class="row">
+                                <div class="col-9">
+                                    <input name="searchWord" id="searchWord" class="form-control mr-sm-2" type="search" placeholder="ابحث عن متاجر"
+                                           aria-label="Search" value="@ViewBag.searchWord">
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-warning orange my-2 my-sm-0" type="submit">ابحث</button>
+                                </div>
+                            </div>
+                        </form>
+                    }
+                    @*<div class="my-2 my-lg-0 ml-5 pr-10">
+                            <button class="btn btn-warning orange" type="submit">تسجيل الدخول</button>
+                            <button class="btn btn-warning orange" type="submit">تسجيل جديد</button>
+                        </div>*@
+
+                </div>
+            </nav>
+        </div>
+
+    </div>
+
+    @RenderBody()
+
+    <!-- Modal -->
+    <div class="modal fade" id="addNewStore" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">قم بتعبئة النموذج أدناه وسنتواصل معك في أقرب وقت ممكن 😘</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4 mt-2">
+                            اسم المتجر:
+                        </div>
+                        <div class="col-8 mt-2">
+                            <input type="text" placeholder="متجر فرسان البرمجة ...." />
+                        </div>
+                        <div class="col-4 mt-2">
+                            الاسم الكريم:
+                        </div>
+                        <div class="col-8 mt-2">
+                            <input type="text" placeholder="الاسم الثلاثي ...." />
+                        </div>
+                        <div class="col-4 mt-2">
+                            رقم الجوال:
+                        </div>
+                        <div class="col-8 mt-2">
+                            <input type="number" placeholder="0508532127 ...." />
+                        </div>
+                        <div class="col-4 mt-2">
+                            البريد الإلكتروني:
+                        </div>
+                        <div class="col-8 mt-2">
+                            <input type="email" placeholder="البريد الإلكتروني ...." />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input id="confirmedAds" type="submit" class="btn btn-secondary blue" value="إرسال" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-primary blue text-white text-center text-lg-start">
+        <!-- Grid container -->
+        <div class="container p-4">
+            <!--Grid row-->
+            <div class="row">
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h4 class="text-uppercase"><b>هل تود الانضمام إلينا؟</b></h4>
+                    <p>
+                        كل ما عليك فعله هو تنزيل أحد تطبيقات @ViewBag.progInfo.Program_Name _ @ViewBag.progInfo.Program_slogan _ من خلال الأزرار أدناه من ثم إضافة منتجاتك 😍
+                    </p>
+                    @if (string.IsNullOrEmpty(@ViewBag.progInfo.Update_Url) == false)
+                    {
+                        <a title="برنامج @ViewBag.progInfo.Program_Name لأجهزة الويندوز إصدار رقم @ViewBag.progInfo.Version _ @ViewBag.progInfo.Update_Name _"
+                           href="@ViewBag.progInfo.Update_Url"
+                           class="btn facebook-color mdi mdi-microsoft-windows"></a>
+                    }
+                    @if (string.IsNullOrEmpty(@ViewBag.progInfo.MacAppliction_url) == false)
+                    {
+                        <a title="برنامج @ViewBag.progInfo.Program_Name لأجهزة الماك" href="@ViewBag.progInfo.MacAppliction_url" class="btn facebook-color mdi mdi-apple"
+                           disabled></a>
+                    }
+                    @if (string.IsNullOrEmpty(@ViewBag.progInfo.PlayStore_Url) == false)
+                    {
+                        <a title="تطبيق @ViewBag.progInfo.Program_Name للأندرويد" href="@ViewBag.progInfo.PlayStore_Url" class="btn facebook-color mdi mdi-google-play"
+                           disabled></a>
+                    }
+                    @if (string.IsNullOrEmpty(@ViewBag.progInfo.AppStore_Url) == false)
+                    {
+                        <a title="تطبيق @ViewBag.progInfo.Program_Name لأجهزة Apple" href="@ViewBag.progInfo.AppStore_Url" class="btn facebook-color mdi mdi-apple-ios"
+                           disabled></a>
+                    }
+                </div>
+                <!--Grid column-->
+                <!--Grid column-->
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h4 class="text-uppercase"><b>روابط هامة</b></h4>
+
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                            <button type="button" class="btn btn-link text-white" data-toggle="modal" data-target="#addAds">إضافة إعلان</button>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("privatePolicy","Home")" class="text-white">سياسة الخصوصية</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("internalPolicy","Home")" class="text-white">السياسة الداخلية</a>
+                        </li>
+                        <li>
+                            @Html.ActionLink("حول المنتج", "About", "Home", new { id = "about" }, new { @class = "text-white" })
+                            @*<a href="#" class="text-white">حول المنتج</a>*@
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Contact","Home")" class="text-white">اتصل بنا</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--Grid column-->
+                <!--Grid column-->
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h4 class="text-uppercase mb-2"><b>تواصل معنا عبر</b></h4>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-group-item-primary blue">
+                            رقم الجوال: <a class="text-white"
+                                           href="tel:@ViewBag.progInfo.Technical_Mobile_No" title="اتصل بمسؤول الخدمة @ViewBag.progInfo.Technical_Name _ @ViewBag.progInfo.Technical_Period _">@ViewBag.progInfo.Technical_Mobile_No</a>
+                                    </li>
+                                    <li class="list-group-item list-group-item-primary blue">
+                                        البريد الإلكتروني: <a class="text-white" title="@ViewBag.progInfo.Technical_Period" href="mailto:@ViewBag.progInfo.Technical_Email">@ViewBag.progInfo.Technical_Email</a>
+                                    </li>
+                                    <li class="list-group-item list-group-item-primary blue">
+                                        وسائل التواصل: <br />
+                                        <div class="row mt-3">
+                                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Whatsapp_Link) == false)
+                                            {
+                                                <a href="@ViewBag.progInfo.Whatsapp_Link" title="تواصل معنا عبر واتسآب" target="_blank" class="col btn whatsapp-color mdi mdi-whatsapp mr-1"></a>
+                                            }
+                                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Telegram_Link) == false)
+                                            {
+                                                <a href="@ViewBag.progInfo.Telegram_Link" title="تواصل معنا عبر تيليجرام" target="_blank" class="col btn telegram-color mdi mdi-telegram mr-1"></a>
+                                            }
+                                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Instagram_Link) == false)
+                                            {
+                                                <a href="@ViewBag.progInfo.Instagram_Link" title="أنظر إلى آخر أخبارنا عبر إنستغرام" target="_blank" class="col btn instagram-color mdi mdi-instagram mr-1"></a>
+                                            }
+                                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Twitter_Link) == false)
+                                            {
+                                                <a href="@ViewBag.progInfo.Twitter_Link" title="اطلع على أخبارنا عبر تويتر" target="_blank" class="col btn twitter-color mdi mdi-twitter mr-1"></a>
+                                            }
+                                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Facebook_Link) == false)
+                                            {
+                                                <a href="@ViewBag.progInfo.Facebook_Link" title="صفختنا على فيس بوك مملوءة بالحيوية والتفاعل" target="_blank" class="col btn facebook-color mdi mdi-facebook mr-1"></a>
+                                            }
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--Grid column-->
+                        </div>
+                        <!--Grid row-->
+                    </div>
+                    <!-- Grid container -->
+                    <!-- Copyright -->
+                    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+                        ***    &copy; @DateTime.Now.Year جميع الحقوق محفوظة لـ
+                        <a target="_blank" title="قم بالتعرف على فرسان البرمجة والإطلاع على آخر اعمالنا" class="text-white"
+                           href="https://programmingknights.netlify.app/">فرسان البرمجة</a>
+                    </div>
+                    <!-- Copyright -->
+                </footer>
+            </body>
+            @*@Scripts.Render("~/bundles/jquery")
+                @Scripts.Render("~/bundles/bootstrap")*@
+            @*@RenderSection("scripts", required: false)*@
+            <script src="~/Content/js/myScript.js"></script>
+        </html>

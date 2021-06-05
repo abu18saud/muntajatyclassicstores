@@ -1,0 +1,120 @@
+﻿@{
+    ViewBag.Title = "اتصل بنا";
+}
+
+<div class="p-20" style="margin:100px 0 100px 0 !important">
+    <div class="jumbotron jumbotron-sm">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-lg-12">
+                    <h1 class="h1">
+                        نحن في خدمتكم 24 ساعة على مدار الأسبوع
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="well well-sm">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">
+                                        الاسم
+                                    </label>
+                                    <input type="text" class="form-control" id="name" placeholder="أدخل اسمك الكريم" required="required" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">
+                                        البريد الإلكتروني
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-envelope"></span>
+                                        </span>
+                                        <input type="email" class="form-control" id="email" placeholder="أدخل بريدك الإلكتروني" required="required" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subject">
+                                        الموضوع
+                                    </label>
+                                    <select id="subject" name="subject" class="form-control" required="required">
+                                        <option value="na" selected="">اختر موضوعاً من القائمة</option>
+                                        <option value="service">خدمة عملاء عامة</option>
+                                        <option value="suggestions">اقتراحات</option>
+                                        <option value="Support">الدعم الفني</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">
+                                        الرسالة
+                                    </label>
+                                    <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required"
+                                              placeholder="أدخل رسالتك هنا وسنرد عليك في أقرب وقت ممكن"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary pull-right blue" id="btnContactUs">
+                                    إرسال الرسالة
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <form>
+                    <legend><span class="glyphicon glyphicon-globe"></span> في حالة عدم الرد يرجى التواصل معنا من خلال المعلومات أدناه</legend>
+                    <address>
+                        <strong>رقم الجوال</strong><br>
+                        <a class="text-center"
+                           href="tel:@ViewBag.progInfo.Technical_Mobile_No" title="اتصل بمسؤول الخدمة @ViewBag.progInfo.Technical_Name _ @ViewBag.progInfo.Technical_Period _">@ViewBag.progInfo.Technical_Mobile_No</a><br>
+                    </address>
+                    <address>
+                        <strong>البريد الإلكتروني</strong><br>
+                        <a class="text-center" title="@ViewBag.progInfo.Technical_Period" href="mailto:@ViewBag.progInfo.Technical_Email">@ViewBag.progInfo.Technical_Email</a>
+                    </address>
+                    <address>
+                        <strong>وسائل التواصل</strong><br>
+                        <a class="text-white" title="@ViewBag.progInfo.Technical_Period" href="mailto:@ViewBag.progInfo.Technical_Email">@ViewBag.progInfo.Technical_Email</a>
+                        <div class="row">
+                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Whatsapp_Link) == false)
+                            {
+                                <a href="@ViewBag.progInfo.Whatsapp_Link" title="تواصل معنا عبر واتسآب" target="_blank" class="col btn whatsapp-color mdi mdi-whatsapp mr-1"></a>
+                            }
+                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Telegram_Link) == false)
+                            {
+                                <a href="@ViewBag.progInfo.Telegram_Link" title="تواصل معنا عبر تيليجرام" target="_blank" class="col btn telegram-color mdi mdi-telegram mr-1"></a>
+                            }
+                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Instagram_Link) == false)
+                            {
+                                <a href="@ViewBag.progInfo.Instagram_Link" title="أنظر إلى آخر أخبارنا عبر إنستغرام" target="_blank" class="col btn instagram-color mdi mdi-instagram mr-1"></a>
+                            }
+                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Twitter_Link) == false)
+                            {
+                                <a href="@ViewBag.progInfo.Twitter_Link" title="اطلع على أخبارنا عبر تويتر" target="_blank" class="col btn twitter-color mdi mdi-twitter mr-1"></a>
+                            }
+                            @if (string.IsNullOrEmpty(ViewBag.progInfo.Facebook_Link) == false)
+                            {
+                                <a href="@ViewBag.progInfo.Facebook_Link" title="صفختنا على فيس بوك مملوءة بالحيوية والتفاعل" target="_blank" class="col btn facebook-color mdi mdi-facebook mr-1"></a>
+                            }
+                        </div>
+                    </address>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+

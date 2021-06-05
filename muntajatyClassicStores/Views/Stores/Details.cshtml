@@ -1,0 +1,788 @@
+﻿@model muntajatyClassicStores.Models.Store
+@using muntajatyClassicStores.Models
+
+@{
+    ViewBag.Title = "متاجر منتجاتي - " + Model.YourCompanyName_Ar;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Social_Media> list = ViewBag.socialMedias as List<Social_Media>;
+    List<Products_Services> productsList = ViewBag.productsServices as List<Products_Services>;
+    List<Category> categoriesList = ViewBag.categories as List<Category>;
+
+    ViewBag.cart = Session["cart_" + Model.ID];
+    int qty = 0;
+    decimal total = 0;
+    decimal vat = 0;
+    decimal totalWithVat = 0;
+    string deliveryWord = $"التوصيل إليك مقابل {Model.delivery.cost} ر.س";
+    bool deliveryAccess = false;
+
+    if (Model.delivery.cost == 0 && Model.delivery.companyOrperson != "")
+    {
+        deliveryWord = $"التوصيل إليك مجاناً 😍";
+        deliveryAccess = false;
+    }
+    else if (Model.delivery.cost > 0 && Model.delivery.companyOrperson != "")
+    {
+        deliveryWord = $"التوصيل إليك مقابل {Model.delivery.cost} ر.س";
+        deliveryAccess = false;
+    }
+    else if (Model.delivery.cost == 0 && Model.delivery.companyOrperson == "")
+    {
+        deliveryWord = $"عذراً هذا المتجر لا يقدم خدمة توصيل إلى المنازل 😔";
+        deliveryAccess = true;
+    }
+
+
+    if ((List<Bill_Item>)Session["cart_" + Model.ID] != null)
+    {
+        foreach (var item in (List<Bill_Item>)Session["cart_" + Model.ID])
+        {
+            qty += item.Quantity;
+            total += item.Total;
+            vat += item.VAT;
+            //totalWithVat = total + vat;
+        }
+    }
+    else
+    {
+    }
+
+}
+
+<!------ Include the above in your HEAD tag ---------->
+
+
+<style>
+    .splide__slide img {
+        width: 100%;
+        height: auto;
+    }
+</style>
+
+@if (Model.Block == false && Model.Online_Store == true && Model.EXP_Subscription > DateTime.Now)
+{
+
+    <nav style="margin: 100px 3% 0 3%">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">نظرة عامة</a>
+            <a class="nav-link" id="nav-Activity-tab" data-toggle="tab" href="#nav-Activity" role="tab" aria-controls="nav-Activity" aria-selected="false">النشاط التجاري</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="card" style="margin:0 3% 0 3%">
+                <div class="row">
+                    @*no-gutters*@
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        @if (string.IsNullOrEmpty(Model.Logo))
+                        {
+                            <center><img class="border border-top-0 mx-auto store-sizes img-fluid img-thumbnail mt-2" title="@Model.YourCompanyName_Ar" alt="@Model.YourCompanyName_Ar" src="https://firebasestorage.googleapis.com/v0/b/muntajatyclassic.appspot.com/o/System%2F%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%8A2.png?alt=media&token=0a2457ca-014b-4ee3-aa64-4f09a0c63a5f"></center>
+                        }
+                        else
+                        {
+                            <center><img class="border border-top-0 mx-auto store-sizes img-fluid img-thumbnail mt-2" title="@Model.YourCompanyName_Ar" alt="@Model.YourCompanyName_Ar" src="@Model.Logo"></center>
+                        }
+                    </div>
+                    <div class="col-lg-9 col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12 mt-2">
+                                <center><h3 class="display-6">@Model.YourCompanyName_Ar</h3></center>
+                                <center><p class="lead"><i class="mdi mdi-map-marker-outline"></i> @Model.Full_Address</p></center>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 col-sm-12">
+                                        <center><p class="lead"><strong>تاريخ الانضمام 📆:</strong></p></center>
+                                        <center><p class="lead">@Model.Create_Date.ToString("dd/MM/yyyy - hh:mm tt")</p></center>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 col-sm-12">
+                                        @*<center><p class="lead"><strong>آخر تحديث 🕦:</strong></p></center>
+                                            <center><p class="lead">@Model.Modify_Date.ToString("dd/MM/yyyy - hh:mm tt")</p></center>*@
+
+                                        <center><p class="lead"><strong>عدد الزيارات 💹:</strong></p></center>
+                                        <center><p id="count" class="lead"></p></center>
+
+                                    </div>
+                                </div>
+                                <center><p class="lead"><strong>التوصيل 🚚:</strong> @deliveryWord</p></center>
+                            </div>
+                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                <div class="row mt-2">
+                                    <span class="col-12 d-block"><center><strong>اتصل:</strong></center></span>
+                                    <div class="col-12 mt-2" style="text-align:center">
+                                        @if (Model.MobileNO != string.Empty)
+                                        {
+                                            <a href="tel:@Model.MobileNO" target="_blank" title="اتصل بـ @Model.YourCompanyName_Ar" class="btn btn-primary mdi mdi-phone"></a>
+                                        }
+                                        @if (Model.Email != string.Empty)
+                                        {
+                                            <a href="mailto:@Model.Email" target="_blank" title="تواصل عبر البريد الإلكتروني مع @Model.YourCompanyName_Ar" class="btn btn-info mdi mdi-email"></a>
+                                        }
+                                        @if (Model.WebSite != string.Empty)
+                                        {
+                                            <a href="@Model.WebSite" target="_blank" title="قم بزيارة موقع @Model.YourCompanyName_Ar" class="btn btn-warning mdi mdi-link"></a>
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(Model.location.locationX) == true && !string.IsNullOrEmpty(Model.location.locationY) == true && !string.IsNullOrEmpty(Model.location.googleMapUrl) == true)
+                                        {
+                                            //1
+                                            <a href="@Model.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @Model.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == true && !string.IsNullOrEmpty(Model.location.locationY) == true && !string.IsNullOrEmpty(Model.location.googleMapUrl) == false)
+                                        {
+                                            //2
+                                            if (Model.location.locationX == "0" || Model.location.locationX == "0")
+                                            {
+
+                                            }
+                                            else
+                                            {
+                                                <a href="@Model.location.locationLink" target="_blank" title="قم بزيارة مقر @Model.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                                            }
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == true && !string.IsNullOrEmpty(Model.location.locationY) == false && !string.IsNullOrEmpty(Model.location.googleMapUrl) == true)
+                                        {
+                                            //3
+                                            <a href="@Model.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @Model.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == true && !string.IsNullOrEmpty(Model.location.locationY) == false && !string.IsNullOrEmpty(Model.location.googleMapUrl) == true)
+                                        {
+                                            //4
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == false && !string.IsNullOrEmpty(Model.location.locationY) == true && !string.IsNullOrEmpty(Model.location.googleMapUrl) == true)
+                                        {
+                                            //5
+                                            <a href="@Model.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @Model.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == false && !string.IsNullOrEmpty(Model.location.locationY) == true && string.IsNullOrEmpty(Model.location.googleMapUrl) == false)
+                                        {
+                                            //6
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == false && !string.IsNullOrEmpty(Model.location.locationY) == false && !string.IsNullOrEmpty(Model.location.googleMapUrl) == true)
+                                        {
+                                            //7
+                                            <a href="@Model.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @Model.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == false && !string.IsNullOrEmpty(Model.location.locationY) == false && !string.IsNullOrEmpty(Model.location.googleMapUrl) == false)
+                                        {
+                                            //8
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <span class="col-12 d-block"><center><strong>حسابات التواصل:</strong></center></span>
+                                    <div class="col-12 mt-2" style="text-align:center">
+                                        @if (list.Count != 0)
+                                        {
+                                            foreach (Social_Media socItem in list)
+                                            {
+                                                <a href="@socItem.prefixWithUsername" target="_blank" title="@socItem.Description" class="btn @socItem.Type.Eng_Name.ToString().ToLower()-color mdi mdi-@socItem.Type.Eng_Name.ToString().ToLower()"></a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>لم تتم إضافة وسائل تواصل لهذا المتجر إلى الآن</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <span class="col-12 d-block"><center><strong></strong></center></span>
+                                    <div class="col-12 mt-2" style="text-align:center">
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-primary blue" data-toggle="modal" data-target="#share">
+                                            <i class="mdi mdi-share-variant"></i>
+                                            مشاركة المتجر
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>*@
+
+
+
+                    </div>
+                    @if (Model.VAT_Rate != 0)
+                    {
+                        <hr />
+                        <div class="col-12 mt-2">
+                            <center>
+                                <h1>
+                                    الأسعار أدناه شاملةً القيمة المضافة
+                                </h1>
+                            </center>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-Activity" role="tabpanel" aria-labelledby="nav-Activity-tab">
+            <div class="card" style="margin:0 3% 0 3%">
+                <div class="row">
+                    @*no-gutters*@
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        @if (string.IsNullOrEmpty(Model.Logo))
+                        {
+                            <center><img class="border border-top-0 mx-auto store-sizes img-fluid img-thumbnail mt-2" title="@Model.YourCompanyName_Ar" alt="@Model.YourCompanyName_Ar" src="https://firebasestorage.googleapis.com/v0/b/muntajatyclassic.appspot.com/o/System%2F%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%8A2.png?alt=media&token=0a2457ca-014b-4ee3-aa64-4f09a0c63a5f"></center>
+                        }
+                        else
+                        {
+                            <center><img class="border border-top-0 mx-auto store-sizes img-fluid img-thumbnail mt-2" title="@Model.YourCompanyName_Ar" alt="@Model.YourCompanyName_Ar" src="@Model.Logo"></center>
+                        }
+                    </div>
+                    <div class="col-lg-9 col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12 mt-2">
+                                <center><h3 class="display-6">@Model.YourCompanyName_Ar</h3></center>
+                                <center><p class="lead"><i class="mdi mdi-map-marker-outline"></i> @Model.Full_Address</p></center>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 col-sm-12">
+                                        <center><p class="lead"><strong><i class="mdi mdi-certificate"></i> رقم السجل التجاري:</strong></p></center>
+                                        <center><p class="lead">@Model.CR_Number</p></center>
+
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 col-sm-12">
+                                        <center><p class="lead"><strong><i class="mdi mdi-cash-lock"></i> الرقم الضريبي:</strong></p></center>
+                                        <center><p class="lead">@Model.VAT_Number</p></center>
+                                    </div>
+                                </div>
+                                <center><p class="lead"><i class="mdi mdi-briefcase-check-outline"></i> <strong>النشاط:</strong> @Model.Activity</p></center>
+                            </div>
+                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                <div class="row mt-2">
+                                    <span class="col-12 d-block"><center><strong>اتصل:</strong></center></span>
+                                    <div class="col-12 mt-2" style="text-align:center">
+                                        @if (Model.MobileNO != string.Empty)
+                                        {
+                                            <a href="tel:@Model.MobileNO" target="_blank" title="اتصل بـ @Model.YourCompanyName_Ar" class="btn btn-primary mdi mdi-phone"></a>
+                                        }
+                                        @if (Model.Email != string.Empty)
+                                        {
+                                            <a href="mailto:@Model.Email" target="_blank" title="تواصل عبر البريد الإلكتروني مع @Model.YourCompanyName_Ar" class="btn btn-info mdi mdi-email"></a>
+                                        }
+                                        @if (Model.WebSite != string.Empty)
+                                        {
+                                            <a href="@Model.WebSite" target="_blank" title="قم بزيارة موقع @Model.YourCompanyName_Ar" class="btn btn-warning mdi mdi-link"></a>
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(Model.location.locationX) == true && !string.IsNullOrEmpty(Model.location.locationY) == true && !string.IsNullOrEmpty(Model.location.googleMapUrl) == true)
+                                        {
+                                            //1
+                                            <a href="@Model.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @Model.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == true && !string.IsNullOrEmpty(Model.location.locationY) == true && !string.IsNullOrEmpty(Model.location.googleMapUrl) == false)
+                                        {
+                                            //2
+                                            if (Model.location.locationX == "0" || Model.location.locationX == "0")
+                                            {
+
+                                            }
+                                            else
+                                            {
+                                                <a href="@Model.location.locationLink" target="_blank" title="قم بزيارة مقر @Model.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                                            }
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == true && !string.IsNullOrEmpty(Model.location.locationY) == false && !string.IsNullOrEmpty(Model.location.googleMapUrl) == true)
+                                        {
+                                            //3
+                                            <a href="@Model.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @Model.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == true && !string.IsNullOrEmpty(Model.location.locationY) == false && !string.IsNullOrEmpty(Model.location.googleMapUrl) == true)
+                                        {
+                                            //4
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == false && !string.IsNullOrEmpty(Model.location.locationY) == true && !string.IsNullOrEmpty(Model.location.googleMapUrl) == true)
+                                        {
+                                            //5
+                                            <a href="@Model.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @Model.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == false && !string.IsNullOrEmpty(Model.location.locationY) == true && string.IsNullOrEmpty(Model.location.googleMapUrl) == false)
+                                        {
+                                            //6
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == false && !string.IsNullOrEmpty(Model.location.locationY) == false && !string.IsNullOrEmpty(Model.location.googleMapUrl) == true)
+                                        {
+                                            //7
+                                            <a href="@Model.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @Model.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                                        }
+                                        else if (!string.IsNullOrEmpty(Model.location.locationX) == false && !string.IsNullOrEmpty(Model.location.locationY) == false && !string.IsNullOrEmpty(Model.location.googleMapUrl) == false)
+                                        {
+                                            //8
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <span class="col-12 d-block"><center><strong>حسابات التواصل:</strong></center></span>
+                                    <div class="col-12 mt-2" style="text-align:center">
+                                        @if (list.Count != 0)
+                                        {
+                                            foreach (Social_Media socItem in list)
+                                            {
+                                                <a href="@socItem.prefixWithUsername" target="_blank" title="@socItem.Description" class="btn @socItem.Type.Eng_Name.ToString().ToLower()-color mdi mdi-@socItem.Type.Eng_Name.ToString().ToLower()"></a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>لم تتم إضافة وسائل تواصل لهذا المتجر إلى الآن</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <span class="col-12 d-block"><center><strong></strong></center></span>
+                                    <div class="col-12 mt-2" style="text-align:center">
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-primary blue" data-toggle="modal" data-target="#share">
+                                            <i class="mdi mdi-share-variant"></i>
+                                            مشاركة المتجر
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>*@
+
+
+
+                    </div>
+                    @if (Model.VAT_Rate != 0)
+                    {
+                        <hr />
+                        <div class="col-12 mt-2">
+                            <center>
+                                <h1>
+                                    الأسعار أدناه شاملةً القيمة المضافة
+                                </h1>
+                            </center>
+                        </div>
+                    }
+                </div>
+            </div>
+
+
+        </div>
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+    </div>
+
+
+
+    <!--End Header-->
+
+
+
+    @*<div class="alert alert-warning orange alert-dismissible fade show" style="margin: 3px 20px 3px 20px" role="alert">
+            <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>*@
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            @using (Html.BeginForm("Details", "Stores", FormMethod.Get))
+            {
+                @*<form class="form-inline my-2 my-lg-0 ml-5 pr-10">
+                        <div class="row">
+                            <div class="col-9">
+                                <input name="searchWord" id="searchWord" class="form-control mr-sm-2" type="search" placeholder="ابحث عن متاجر"
+                                       aria-label="Search" value="@ViewBag.searchWord">
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-warning orange my-2 my-sm-0" type="submit">ابحث</button>
+                            </div>
+                        </div>
+                    </form>*@
+
+                <form class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="mdi mdi-magnify mr-2" style="font-size:35px"></i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+
+                            <input name="searchWord" id="searchWord" class="form-control form-control-lg form-control-borderless" value="@ViewBag.searchWord" type="search" placeholder="ابحث عن سلعة أو خدمة لدى @Model.YourCompanyName_Ar">
+                        </div>
+                        @*<div class="col-3 dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Dropdown button
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>*@
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-success blue ml-2" type="submit">ابحث</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            }
+        </div>
+        <!--end of col-->
+    </div>
+    <!--End Search Box-->
+    <!-- Start Products -->
+    <div class="container">
+
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <center>
+                    @if (string.IsNullOrEmpty(ViewBag.category))
+                    {
+                        <a href="@Url.Action("Details","Stores", new { id = Model.ID })" class="badge badge-primary text-white blue m-1" style="font-size: 15px;">كل الفئات</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Details","Stores", new { id = Model.ID })" class="badge badge-primary text-white orange m-1" style="font-size: 15px;">كل الفئات</a>
+                    }
+                    @foreach (var _category in categoriesList)
+                    {
+                        if (_category.Category_Name == ViewBag.category)
+                        {
+                            <a href="@Url.Action("Details","Stores", new { id = Model.ID, category = _category.Category_Name })" class="badge badge-secondary text-white blue m-1" style="font-size: 15px;">@_category.Category_Name</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Details","Stores", new { id = Model.ID, category = _category.Category_Name })" class="badge badge-secondary text-white orange m-1" style="font-size: 15px;">@_category.Category_Name</a>
+                        }
+                    }
+                </center>
+            </div>
+
+        </div>
+
+        <div class="row mt-3 mb-3">
+            @if (productsList.Count != 0)
+            {
+                foreach (var product in ViewBag.productsServices as List<Products_Services>)
+                {
+                    if (product.Name != "التوصيل")
+                    {
+                        <!-- Gallery item -->
+                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4 mobile-margin visible-xs">
+                            <div class="bg-white rounded shadow-sm">
+                                @if (string.IsNullOrEmpty(@product.Picture_0) == false)
+                                {
+                                    <div class="bg-image">
+                                        <img src="@product.Picture_0"
+                                             class="img-fluid"
+                                             alt="@product.Description" />
+                                        <div class="mask" style="background-color: rgba(0, 0, 0, 0.6)">
+                                            <div class="d-flex justify-content-center align-items-center h-100">
+                                                <p class="text-white mb-0">@product.Description</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @*<img title="@product.Description" src="@product.Picture_0" data-mdb-img="@product.Picture_0" style="width: 255px; height: 170px" alt="@product.Name" class="img-fluid card-img-top ounded mx-auto d-block border border-right-0">*@
+                                }
+                                else
+                                {
+                                    <img title="@product.Description" src="https://firebasestorage.googleapis.com/v0/b/muntajatyclassic.appspot.com/o/System%2F%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%8A2.png?alt=media&token=0a2457ca-014b-4ee3-aa64-4f09a0c63a5f" style="width: 255px; height: 170px" alt="@product.Name" class="img-fluid card-img-top mx-auto d-block border border-right-0">
+                                }
+                                <div class="p-4">
+                                    <h5> <span class="text-dark">@product.Name</span></h5>
+                                    <p class="small text-muted mb-0">@product.Eng_Name</p>
+                                    <div class="d-flex align-items-center justify-content-between rounded-pill bg-light px-3 py-2 mt-4">
+                                        <p class="small mb-0"><i class="fa fa-picture-o mr-2"></i><span class="font-weight-bold">@product.Category.Category_Name</span></p>
+                                        @if (product.Type.Name != "خدمة")
+                                        {
+                                            <div class="badge badge-warning px-3 rounded-pill font-weight-bold">@string.Format("{0:n}", (product.SellingPrice + (product.SellingPrice * Model.VAT_Rate / 100)))  ر.س</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="badge badge-warning px-3 rounded-pill font-weight-bold">التكلفة بالتفاوض</div>
+                                        }
+                                    </div>
+                                    @if (product.Type.Name != "خدمة")
+                                    {
+                                        using (Html.BeginForm("addToCart", "Stores", new { productId = product.ID, storeId = Model.ID, vatPercentage = Model.VAT_Rate }, FormMethod.Post))
+                                        {
+                                            <div class="row mt-2">
+                                                <div class="col-8">
+                                                    <input id="count" name="count" type="number" class="form-control text-center" value="1" max="@product.Stock" min="1" />
+                                                </div>
+                                                <div class="col-4">
+                                                    <button type="submit" title="أضف إلى السلة" class="btn btn-primary rounded-pill blue mt-2"><i class="mdi mdi-cart-plus"></i></button>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="row mt-2">
+                                            <div class="col-8">
+                                                @*<input id="count" name="count" type="number" class="form-control text-center" value="1" max="@product.Stock" min="1" />*@
+                                            </div>
+                                            <div class="col-4">
+                                                <a target="_blank" href="@Url.Action("sendService","shareWithSocialMedia", new {id = Model.ID,serviceName = product.Name})" title="تفاوض عبر واتسآب" class="btn btn-primary rounded-pill whatsapp-color mt-2"><i class="mdi mdi-whatsapp"></i></a>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End -->
+                    }
+                }
+            }
+        </div>
+        @if (productsList.Count == 0)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-primary" role="alert" style="text-align:center">
+                        لم يقم هذا المتجر بإضافة منتجاته حتى الآن
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Code begins here -->
+    @*<a href="#" class="float" style="text-align:center; font-size:45px;">
+            <center><i class="mdi mdi-cart"></i></center>
+        </a>*@
+
+    <!-- Button trigger modal -->
+    <button type="button" class="float" style="text-align:center; font-size:45px;" data-toggle="modal" data-target="#cart_@Model.ID">
+        <center><i class="mdi mdi-cart"></i></center>
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="cart_@Model.ID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                @using (Html.BeginForm("Insert", "Bills", new { storeId = Model.ID.Trim(), totalQuantity = qty, totalSummation = total, vatPercent = Model.VAT_Rate }, FormMethod.Post))
+                {
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">سلة مشترياتك من متجر @Model.YourCompanyName_Ar</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @*<div id="messageCheckout" class="alert alert-warning blue alert-dismissible fade hidden" style="margin: 3px 20px 3px 20px" role="alert">
+                                <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+                                <button type="button" class="close" onclick="hideMsg()" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>*@
+                        <div class="row">
+                            <div class="col-6">
+                                اسم المنتج أو الخدمة
+                            </div>
+                            <div class="col-3">
+                                الكمية
+                            </div>
+                            <div class="col-3">
+                                التكلفة
+                            </div>
+                        </div>
+
+                        <div class="list-group">
+                            @if ((List<Bill_Item>)Session["cart_" + Model.ID] != null)
+                            {
+                                foreach (var item in (List<Bill_Item>)Session["cart_" + Model.ID])
+                                {
+
+                                    <div href="#" class="list-group-item list-group-item-action">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                @item.Name
+                                            </div>
+                                            <div class="col-3">
+                                                @item.Quantity
+                                            </div>
+                                            <div class="col-2">
+                                                @string.Format("{0:n}", item.Total)
+                                            </div>
+                                            <div class="col-1">
+                                                <a title="إزالة @item.Name من سلة مشترياتك" href="@Url.Action("removeFromCart","Stores", new {productId=item.ID, storeId=Model.ID})" class="close">
+                                                    <span>&times;</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <span>يبدو أنك لم تقم بإضافة سلع من متجر @Model.YourCompanyName_Ar !</span>
+                            }
+
+                            <div class="row mt-2">
+                                <div class="col-3">
+                                    الكمية:
+                                </div>
+                                <div class="col-9">
+                                    @qty
+                                </div>
+
+                                <div class="col-3">
+                                    المجموع:
+                                </div>
+                                <div class="col-9">
+                                    @string.Format("{0:n}", total) ر.س
+                                </div>
+
+                                <div class="col-3">
+                                    الضريبة (@Model.VAT_Rate%):
+                                </div>
+                                <div class="col-9">
+                                    @string.Format("{0:n}", vat) ر.س
+                                </div>
+                                <div class="col-3">
+                                    المجموع الكلي:
+                                </div>
+                                <div class="col-9">
+                                    <b>@string.Format("{0:n}", totalWithVat = (total + vat)) ر.س</b>
+                                </div>
+                            </div>
+                            <div id="totalWithVat" style="display:none">@totalWithVat</div>
+                            <div id="deliveryAccess" style="display:none">@deliveryAccess.ToString()</div>
+
+
+
+
+                            <div class="input-group mt-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">الاسم الكريم</span>
+                                </div>
+                                @Html.TextBox("firstName", null, htmlAttributes: new { placeholder = "الاسم الأول", @class = "form-control" })
+                                @Html.TextBox("lastName", null, htmlAttributes: new { placeholder = "اسم العائلة", @class = "form-control" })
+
+                                @*<input id="firstName" type="text" aria-label="First name" placeholder="الاسم الأول" class="form-control">
+                                    <input id="lastName" type="text" aria-label="Last name" placeholder="اسم العائلة" class="form-control">*@
+                            </div>
+                            <div class="input-group mt-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">رقم الجوال</span>
+                                </div>
+                                @Html.TextBox("_mobileNo", null, htmlAttributes: new { type = "number", placeholder = "0500000000", @class = "form-control" })
+                                @*<input type="text" aria-label="Mobile" placeholder="0500000000" class="form-control">*@
+                            </div>
+                            <label class="mt-2">طريقة التسليم المطلوبة:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        @Html.RadioButton("delivery", "توصيل", htmlAttributes: new { ID = "delivery" })
+                                        @*@Html.RadioButton("delivery", null, false)*@
+                                        @*<input name="del" type="radio" aria-label="Radio button for following text input">*@
+                                    </div>
+                                </div>
+                                <input type="text" disabled class="form-control" value="@deliveryWord" aria-label="Text input with radio button">
+                            </div>
+                            <div class="input-group mt-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        @*@Html.RadioButton("delivery", "إستلام", htmlAttributes: new { ID = "delivery" })*@
+                                        <input name="delivery" checked type="radio" aria-label="Radio button for following text input">
+                                    </div>
+                                </div>
+                                <input type="text" disabled class="form-control" value="التجهيز في متجر @Model.YourCompanyName_Ar" aria-label="Text input with radio button">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+
+                        <button id="confirmed" type="submit" class="btn btn-primary blue"><i class="mdi mdi-cart-plus"></i>  تأكيد الطلب</button>
+
+
+                        @*<a href="@Url.Action("Insert", "Bills", new { storeId = Model.ID.Trim() })" class="btn btn-primary blue"><i class="mdi mdi-cart-plus"></i>  تأكيد الطلب</a>*@
+
+                        <a href="@Url.Action("clearCart","Stores", new {storeId=Model.ID})" class="btn btn-secondary orange">إلغاء الطلب</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق النافذة</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="share" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">مشاركة متجر @Model.YourCompanyName_Ar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    مكّن المزيد من الأصدقاء من مشاهدة ما تفضله من منتجات عن طريق المشاركة:
+                    <div class="row">
+                        <div class="col">
+                            <a href="@Url.Action("shareStoreByWhatsapp","shareWithSocialMedia", new {pageLink= Request.RawUrl, id = Model.ID})" target="_blank" title="مشاركة المتجر عبر واتسآب" class="btn whatsapp-color mdi mdi-whatsapp"></a>
+                            <a href="@Url.Action("shareStoreByTelegram","shareWithSocialMedia", new {pageLink= Request.RawUrl, id = Model.ID})" target="_blank" title="مشاركة المتجر عبر تيليجرام" class="btn telegram-color mdi mdi-telegram"></a>
+                            <a href="@Url.Action("shareStoreByFacebook","shareWithSocialMedia", new { id = Model.ID})" target="_blank" title="نشر المتجر عبر فيسبوك" class="btn facebook-color mdi mdi-facebook"></a>
+                            <a href="@Url.Action("shareStoreByTwitter","shareWithSocialMedia", new {pageLink= Request.RawUrl, id = Model.ID})" target="_blank" title="مشاركة المتجر عبر تويتر" class="btn twitter-color mdi mdi-twitter"></a>
+                            <a href="@Url.Action("shareStoreBySMS","shareWithSocialMedia", new {pageLink= Request.RawUrl, id = Model.ID})" target="_blank" title="أرسل رسالة نصية لأصدقائك بالنقر هنا" class="btn btn-secondary mdi mdi-message-processing"></a>
+                            <a href="@Url.Action("shareStoreByGmail","shareWithSocialMedia", new {pageLink= Request.RawUrl, id = Model.ID})" target="_blank" title="أرسل إلى جهات اتصالك في Gmail عن هذا المتجر الرائع" class="btn btn-danger mdi mdi-gmail"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other Stores -->
+    
+
+
+
+
+    <script>
+        async function recordVisit() {
+            const URL = "https://us-central1-counters-b.cloudfunctions.net/counter?id=muntajatyClassic_@Model.ID";
+            const LOCAL_DOMAINS = ["localhost", "127.0.0.1"];
+
+            if (!LOCAL_DOMAINS.includes(window.location.hostname)) {
+                let response = await fetch(URL);
+
+                if (response.ok) {
+                    let json = await response.json();
+                    console.log(json);
+                    $("#count")[0].innerHTML = json.count;
+                } else {
+                    console.log("HTTP-Error: " + response.status);
+                }
+            }
+        };
+
+        recordVisit();
+    </script>
+
+}
+else
+{
+    <div class="row" style="margin:150px 0 150px 0">
+        <div class="col-12">
+            <h1 class="text-center"><i style="font-size:200px" class="mdi mdi-cart-off"></i></h1>
+        </div>
+        <div class="col-12">
+            <h1 class="text-center">متجر @Model.YourCompanyName_Ar ليس مشتركاً في خدمة السوق الإلكتروني</h1>
+        </div>
+    </div>
+}
+

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "muntajatyClassicStores", "muntajatyClassicStores\muntajatyClassicStores.csproj", "{DD395B74-0129-44C8-96C5-C416D5218951}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD395B74-0129-44C8-96C5-C416D5218951}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD395B74-0129-44C8-96C5-C416D5218951}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD395B74-0129-44C8-96C5-C416D5218951}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD395B74-0129-44C8-96C5-C416D5218951}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {78D2F4EE-3C52-4548-A504-4FBAFE4133E0}
+	EndGlobalSection
+EndGlobal

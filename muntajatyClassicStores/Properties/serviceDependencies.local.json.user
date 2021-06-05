@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "restored": true,
+      "restoreTime": "2021-03-09T00:48:49.1700069Z"
+    },
+    "appInsights1": {
+      "restored": true,
+      "restoreTime": "2021-03-09T00:49:47.5687313Z"
+    }
+  },
+  "parameters": {
+    "appInsights1.subscriptionId": {
+      "Name": "appInsights1.subscriptionId",
+      "Type": "subscription",
+      "Value": "330fafb9-47f9-462b-9dab-4e4bebed4e09"
+    },
+    "appInsights1.resourceGroupName": {
+      "Name": "appInsights1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "cloud-shell-storage-westeurope"
+    }
+  }
+}

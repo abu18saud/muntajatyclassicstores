@@ -1,0 +1,139 @@
+﻿@font-face {
+    font-family: 'Al-Aramco_';
+    src: url('Font/Al-Aramco_.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'DroidKufi-Regular';
+    src: url('Font/DroidKufi-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'GE_SS_Two_Bold';
+    src: url('Font/GE_SS_Two_Bold.eot') format('embedded-opentype');
+}
+
+
+body {
+    /*    padding-top: 100px;
+*/
+    font-size: 14px;
+    background-color: #FFF;
+    font-family: DroidKufi-Regular !important;
+}
+
+/*Colors*/
+.blue {
+    color: azure;
+    background-color: #0f74bc !important;
+    border-color: #f7951e;
+}
+
+.blue-outline {
+    color: #0f74bc;
+    border-color: #0f74bc;
+}
+
+    .blue-outline:hover {
+        color: azure;
+        background-color: #0f74bc !important;
+    }
+
+.orange {
+    color: azure;
+    background-color: #f7951e !important;
+    border-color: blue;
+}
+
+.border_orange {
+    border-bottom: 2px solid #f7951e;
+}
+
+.whatsapp-color {
+    color: #FFFFFF;
+    background-color: #25D366 !important;
+    border-color: #ECE5DD;
+}
+
+.telegram-color {
+    color: #FFFFFF;
+    background-color: #85b2ff !important;
+    border-color: #24f4ff;
+}
+
+.instagram-color {
+    color: #FFFFFF;
+    background-color: #E1306C !important;
+    border-color: #FD1D1D;
+}
+
+.twitter-color {
+    color: #FFFFFF;
+    background-color: #1DA1F2 !important;
+    border-color: #657786;
+}
+
+.facebook-color {
+    color: #f7f7f7;
+    background-color: #3b5998 !important;
+    border-color: #8b9dc3;
+}
+
+.linkedin-color {
+    color: #FFFFFF;
+    background-color: #2867B2 !important;
+    border-color: #FFFFFF;
+}
+
+.snapchat-color {
+    color: black;
+    background-color: #FFFC00 !important;
+    border-color: black;
+}
+
+/*Size*/
+.h-20 {
+    height: 20% !important;
+}
+
+.h-5 {
+    height: 500px !important;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.store-sizes {
+    width: 251.96px;
+    height: 206.97px;
+/*    max-width: 100%;
+*/    /*    height: auto;*/
+}
+
+.item-analyse {
+    width: 402.25px;
+    height: 104px;
+}
+
+
+/*        *{
+            padding: 0;
+            margin: 0;
+        }*/
+
+
+.float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    left: 40px;
+    background-color: #0f74bc;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    box-shadow: 2px 2px 3px #f7951e;
+}
+
+.my-float {
+    margin-top: 22px;
+}

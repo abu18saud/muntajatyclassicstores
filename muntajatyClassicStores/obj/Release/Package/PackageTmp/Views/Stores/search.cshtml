@@ -1,0 +1,197 @@
+﻿@using muntajatyClassicStores.Models
+@model  List<muntajatyClassicStores.Models.Store>
+
+@{
+    ViewBag.Title = "البحث عن متاجر";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Store> list = ViewBag.storesList as List<Store>;
+}
+
+<div style="margin:100px 0 100px 0;">
+
+    <h1 class="display-4 text-center">لقد قمت بالبحث عن متاجر تتضمن معلوماتها عبارة "@ViewBag.searchWord"</h1><br />
+    <p class="text-center">عدد النتائج: @list.Count</p>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mt-3">
+                <center>
+                    <h1 id="stores">المتاجر</h1>
+                </center>
+            </div>
+        </div>
+        <hr style="width:100%;text-align:left;margin-left:0">
+        @if (list.Count != 0)
+        {
+            foreach (Store item in list)
+            {
+                <!--item-->
+    <div class="row border border-info rounded mb-3 mr-2 ml-2">
+        <div class="col-lg-4 col-md-12 col-sm-12">
+            @if (item.Logo != null && item.Logo != string.Empty)
+            {
+                <center>
+                    <img class="border border-top-0 mx-auto store-sizes img-fluid img-thumbnail mt-2" title="@item.YourCompanyName_Ar" src="@item.Logo"
+                         alt="@item.YourCompanyName_Ar">
+                </center>
+            }
+            else
+            {
+                <center>
+                    <img class="border border-top-0 mx-auto store-sizes img-fluid img-thumbnail mt-2" title="@item.YourCompanyName_Ar" src="https://firebasestorage.googleapis.com/v0/b/muntajatyclassic.appspot.com/o/System%2F%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%8A2.png?alt=media&token=0a2457ca-014b-4ee3-aa64-4f09a0c63a5f"
+                         alt="@item.YourCompanyName_Ar">
+                </center>
+            }
+
+        </div>
+        <div class="col-lg-8 col-md-12 col-sm-12 border-right mt-2">
+            <div class="row">
+                <h3 class="col-lg-8 col-md-12 col-sm-12 mt-2"><center>@item.YourCompanyName_Ar</center> </h3>
+                <div class="col-lg-4 col-md-12 col-sm-12 mt-2">
+                    <center>
+
+                        <span>اتصل:</span>
+                        @if (item.MobileNO != string.Empty)
+                        {
+                            <a href="tel:@item.MobileNO" target="_blank" title="اتصل بـ @item.YourCompanyName_Ar" class="btn btn-primary mdi mdi-phone"></a>
+                        }
+                        @if (item.Email != string.Empty)
+                        {
+                            <a href="mailto:@item.Email" target="_blank" title="تواصل عبر البريد الإلكتروني مع @item.YourCompanyName_Ar" class="btn btn-info mdi mdi-email"></a>
+                        }
+                        @if (item.WebSite != string.Empty)
+                        {
+                            <a href="@item.WebSite" target="_blank" title="قم بزيارة موقع @item.YourCompanyName_Ar" class="btn btn-warning mdi mdi-link"></a>
+                        }
+
+                        @if (!string.IsNullOrEmpty(item.location.locationX) == true && !string.IsNullOrEmpty(item.location.locationY) == true && !string.IsNullOrEmpty(item.location.googleMapUrl) == true)
+                        {
+                            //1
+                            <a href="@item.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @item.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                        }
+                        else if (!string.IsNullOrEmpty(item.location.locationX) == true && !string.IsNullOrEmpty(item.location.locationY) == true && !string.IsNullOrEmpty(item.location.googleMapUrl) == false)
+                        {
+                            //2
+                            if (item.location.locationX == "0" || item.location.locationX == "0")
+                            {
+
+                            }
+                            else
+                            {
+                                <a href="@item.location.locationLink" target="_blank" title="قم بزيارة مقر @item.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                            }
+                        }
+                        else if (!string.IsNullOrEmpty(item.location.locationX) == true && !string.IsNullOrEmpty(item.location.locationY) == false && !string.IsNullOrEmpty(item.location.googleMapUrl) == true)
+                        {
+                            //3
+                            <a href="@item.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @item.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                        }
+                        else if (!string.IsNullOrEmpty(item.location.locationX) == true && !string.IsNullOrEmpty(item.location.locationY) == false && !string.IsNullOrEmpty(item.location.googleMapUrl) == true)
+                        {
+                            //4
+                        }
+                        else if (!string.IsNullOrEmpty(item.location.locationX) == false && !string.IsNullOrEmpty(item.location.locationY) == true && !string.IsNullOrEmpty(item.location.googleMapUrl) == true)
+                        {
+                            //5
+                            <a href="@item.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @item.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                        }
+                        else if (!string.IsNullOrEmpty(item.location.locationX) == false && !string.IsNullOrEmpty(item.location.locationY) == true && string.IsNullOrEmpty(item.location.googleMapUrl) == false)
+                        {
+                            //6
+                        }
+                        else if (!string.IsNullOrEmpty(item.location.locationX) == false && !string.IsNullOrEmpty(item.location.locationY) == false && !string.IsNullOrEmpty(item.location.googleMapUrl) == true)
+                        {
+                            //7
+                            <a href="@item.location.googleMapUrl" target="_blank" title="قم بزيارة مقر @item.YourCompanyName_Ar عبر خرائط جوجل" class="btn btn-danger mdi mdi-map-marker"></a>
+                        }
+                        else if (!string.IsNullOrEmpty(item.location.locationX) == false && !string.IsNullOrEmpty(item.location.locationY) == false && !string.IsNullOrEmpty(item.location.googleMapUrl) == false)
+                        {
+                            //8
+                        }
+
+
+                    </center>
+
+                </div>
+            </div>
+            <hr style="width:100%;text-align:left;margin-left:0">
+            <div class="row">
+
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                    @if (item.Activity != string.Empty)
+                    {
+                        <p><center>@item.Activity</center></p>
+                    }
+                    else
+                    {
+                        <p> لم يقم المتجر بإضافة تفاصيل نشاطه </p>
+                    }
+                    @*<center>عدد المنتجات: @ViewBag.productsCounts[i]</center>*@
+                </div>
+
+                <div class="col-lg-8 col-md-12 col-sm-12 mt-2">
+                    <center>
+                        <div>
+                            <span> خدمة التوصيل:</span><br />
+
+                            @if (item.delivery.cost == 0 && item.delivery.companyOrperson != "")
+                            {
+                                <b>التوصيل مجاناً 😍</b>
+                            }
+                            else if (item.delivery.cost > 0 && item.delivery.companyOrperson != "")
+                            {
+                                <b>التوصيل مقابل @item.delivery.cost ر.س فقط</b>
+                            }
+                            else if (item.delivery.cost == 0 && item.delivery.companyOrperson == "")
+                            {
+                                <b>لا يقدم خدمة توصيل 😔</b>
+                            }
+                        </div>
+                    </center>
+
+                    @*@{
+                            List<Social_Media> list = ViewBag.socMediaList;
+                            if (list.Count != 0)
+                            {
+                                foreach (Social_Media socItem in list)
+                                {
+                                    @Html.Display("<a href = '" + socItem.prefixWithUsername + "' target = '_blank' title = '" + socItem.Description + "' class='btn " + socItem.Type.Eng_Name.ToString().ToLower() + "-color mdi mdi-" + socItem.Type.Eng_Name.ToString().ToLower() + "'></a>");
+                                    //< a href = "@socItem.prefixWithUsername" target = "_blank" title = "@socItem.Description" class="btn @socItem.Type.Eng_Name.ToString().ToLower()-color mdi mdi-@socItem.Type.Eng_Name.ToString().ToLower()"></a>
+                                }
+                            }
+                            else
+                            {
+                                @Html.Display("<span> لا تتم إضافة وسائل تواصل لهذا المتجر إلى الآن</span>");
+                            }
+                    }*@
+
+
+                </div>
+            </div>
+            <div class="row mr-5">
+
+                @*@Html.ActionLink("تسوق الآن", "Details", "Stores", new { id = item.ID }, new { @class = "col-lg-4 col-md-12 col-sm-12 btn blue m-2" })<i class='mdi mdi-shopping'></i>*@
+
+                <a class="btn btn-block blue mt-2 mb-2 ml-3 mr-3" href="@Url.Action("Details", "Stores", new { id = item.ID })">
+                    <i class="mdi mdi-shopping">
+                    </i> تسوق
+                    الآن
+                </a>
+
+            </div>
+        </div>
+    </div>
+                <!--End-->
+
+            }
+        }
+        else
+        {
+            <b><span class="text-center">لا توجد متاجر تتضمن العبارة التي تقوم بالبحث عنها!</span></b>
+        }
+    </div>
+
+
+</div>
+
+
